@@ -1,6 +1,7 @@
 
 
 # python NeuralNetworkTests.py TestOptimizers1
+# python .\SoftConvTests.py TestOptimizers2
 class Sgd:
     
     def __init__(self, learning_rate: float):
@@ -11,3 +12,19 @@ class Sgd:
         # print(weight_tensor.shape)
         # print(gradient_tensor.shape)
         return weight_tensor - self.learning_rate * gradient_tensor
+
+
+class SgdWithMomentum:
+    def __init__(self):
+        pass
+
+    def calculate_update(self, weight_tensor, gradient_tensor):
+        pass
+
+
+class Adam:
+    def __init__(self):
+        pass
+
+    def calculate_update(self, weight_tensor, gradient_tensor):
+        pass
