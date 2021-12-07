@@ -1,7 +1,7 @@
 from Layers.Base import BaseLayer
 import numpy as np 
 
-# python .\SoftConvTests.py TestConv
+# python .\NeuralNetworkTests.py TestConv
 class Conv(BaseLayer):
     def forward(input_tensor):
         pass

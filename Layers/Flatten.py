@@ -1,7 +1,7 @@
 from Layers.Base import BaseLayer
 import numpy as np 
 
-# python .\SoftConvTests.py TestFlatten
+# python .\NeuralNetworkTests.py TestFlatten
 class Flatten(BaseLayer):
     def forward(input_tensor):
         pass

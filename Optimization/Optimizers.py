@@ -1,7 +1,7 @@
 
 
 # python NeuralNetworkTests.py TestOptimizers1
-# python .\SoftConvTests.py TestOptimizers2
+# python .\NeuralNetworkTests.py TestOptimizers2
 class Sgd:
     
     def __init__(self, learning_rate: float):
