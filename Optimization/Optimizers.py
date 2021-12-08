@@ -32,7 +32,7 @@ class Adam:
         self.k = 1
 
     def calculate_update(self, weight_tensor, gradient_tensor):
-        eps = 0.000000000000001
+        eps = np.finfo('float').eps
         self.v = self.mu * self.v + (1-self.mu)*gradient_tensor
         self.r = self.rho * self.r + (1-self.rho)*gradient_tensor*gradient_tensor
         v_ = self.v / (1 - self.mu**self.k)
