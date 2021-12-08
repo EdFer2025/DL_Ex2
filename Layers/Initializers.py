@@ -1,7 +1,7 @@
 from Layers.Base import BaseLayer
 import numpy as np
 
-# python .\SoftConvTests.py TestInitializers
+# python .\NeuralNetworkTests.py TestInitializers
 class Constant:
     def __init__(self, cons_init=0.1):
         self.const_init = cons_init
