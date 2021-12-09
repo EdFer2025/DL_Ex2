@@ -25,6 +25,8 @@ class Conv(BaseLayer):
         self.bias = np.random.random(size=(num_kernels,))
 
         self.input_dimensions = None # dimensions of the input not including the channels
+        self.input_shape = None
+        self.input_tensor = None
         self.output_shape = None # (self.batch_size, self.num_kernels, self.input_dimensions...)
 
         self.gradient_weights = None
@@ -55,9 +57,11 @@ class Conv(BaseLayer):
         self.bias = bias_initializer.initialize(self.num_kernels, fan_in, fan_out)
 
     def forward(self, input_tensor):
-        input_shape = input_tensor.shape
-        self.batch_size = input_shape[0]
-        self.input_dimensions = input_shape[2:]
+        self.input_shape = input_tensor.shape
+        self.input_tensor = input_tensor
+        
+        self.batch_size = self.input_shape[0]
+        self.input_dimensions = self.input_shape[2:]
 
         batch_output_shape = [self.batch_size, self.num_kernels] + list(self.input_dimensions)
         batch_output = np.zeros(shape=batch_output_shape)
@@ -110,5 +114,34 @@ class Conv(BaseLayer):
 
 
     def backward(self, error_tensor):
+        backward_kernels_shape = [self.input_channels, self.num_kernels] + list(self.convolution_shape[1:])
+        backward_kernels = np.zeros(shape=backward_kernels_shape)
+       
+        for k in range(self.num_kernels):
+            for c in range(self.input_channels):
+                kern = np.flip(self.weights[k,c], axis=0)
+                # if len(self.convolution_shape) > 2: # 2D convolution
+                #     kern = np.flip(kern, axis=2)
+                # kern = new_weights[k,c]
+                backward_kernels[c, k] = kern
         
-        pass
+
+        # Compute input_gradient
+        input_gradient = np.zeros(shape=self.input_shape)
+        for b in range(self.batch_size):
+            for k in range(backward_kernels.shape[0]):
+                out = convolve(error_tensor[b], backward_kernels[k], mode="same", method="direct")
+                out = np.sum(out, axis=0)                
+                input_gradient[b, k] = out
+        
+        # compute weights_gradient
+        for b in range(self.batch_size):
+            in_tensor = self.input_tensor[b]
+            for e in range(error_tensor.shape[0]):
+                err_tensor = error_tensor[e]
+                out = convolve(in_tensor, err_tensor, mode="same", method="direct")
+                
+
+
+            pass
+        return input_gradient
