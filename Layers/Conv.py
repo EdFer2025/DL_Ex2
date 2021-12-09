@@ -4,6 +4,7 @@ import numpy as np
 from scipy.signal import correlate, convolve
 
 # python .\NeuralNetworkTests.py TestConv
+# python .\SoftConvTests.py
 class Conv(BaseLayer):
     def __init__(self, stride_shape, convolution_shape, num_kernels):
         super().__init__()
@@ -48,8 +49,10 @@ class Conv(BaseLayer):
 
     def initialize(self, weights_initializer, bias_initializer):
         # TODO understand what means fan_in, and fan_out
-        self.weights = weights_initializer.initialize(self.weights_shape, None, None)
-        self.bias = bias_initializer.initialize(self.num_kernels, None, None)
+        fan_in = np.prod(self.convolution_shape)
+        fan_out = self.num_kernels * np.prod(self.convolution_shape[1:])
+        self.weights = weights_initializer.initialize(self.weights_shape, fan_in, fan_out)
+        self.bias = bias_initializer.initialize(self.num_kernels, fan_in, fan_out)
 
     def forward(self, input_tensor):
         input_shape = input_tensor.shape
@@ -70,12 +73,7 @@ class Conv(BaseLayer):
 
         # sampling using strides
         self._check_stride_shape()
-        """print()
-        print()
-        print(input_tensor.shape)
-        print(self.input_dimensions)        
-        print(self.stride_shape)
-        print("idxs")"""
+        
         idxs = []
         for i in range(len(self.input_dimensions)):
             ax = self.input_dimensions[i]
@@ -112,4 +110,5 @@ class Conv(BaseLayer):
 
 
     def backward(self, error_tensor):
+        
         pass
