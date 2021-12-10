@@ -1,4 +1,3 @@
-from Layers.Base import BaseLayer
 import numpy as np
 
 # python .\NeuralNetworkTests.py TestInitializers
